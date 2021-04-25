@@ -1,0 +1,205 @@
+\documentclass{article}
+\usepackage{authblk}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\graphicspath{{./images/}}
+
+\usepackage{natbib}
+\usepackage{url}
+\bibliographystyle{apa}
+
+\DeclareMathOperator*{\argmax}{argmax}
+\title{Detecting Heart Attacks from Patient Data}
+\author{Nathaniel Netznik, Huy Ngo, Zheyu Zhang}
+\affil{CMPSC 445 - Applied Machine Learning in Data Science}
+\date{}
+
+%I used https://www.overleaf.com/learn/latex/Tutorials as a general reference for LaTeX syntax.
+\begin{document}
+\maketitle
+\begin{abstract}
+In recent years, machine learning models have led to breakthroughs in the medical field. These developments have allowed for the detection and prediction of health conditions with notable accuracy. We deployed three well-known machine learning models - k-nearest neighbors, naive Bayes, and decision trees - to detect heart attacks in patients. We found that the naive Bayes model was most effective at the task, followed by decision trees and K-nearest neighbors respectively.
+\end{abstract}
+\section{Introduction}
+
+
+Illness detection is critical for providing effective care to patients reporting discomfort. Traditionally, this task has been addressed by empirical human judgment. With the emergence of computing over the past few decades, medical professionals have access to a new arsenal of systematic, automated, and data-driven methods for solving such problems. In this study we are particularly interested in detecting heart attacks in patients given biomedical data such as their age, gender, type of chest pain, and various other potentially relevant factors. We will apply three basic machine learning algorithms to address this problem. This study could assist medical practitioners in diagnosing and treating patients appropriately.
+
+
+There have been previous studies that use machine learning to detect heart attacks. \cite{karthikeyan} used XGBoost, an extreme gradient boosting method, obtaining an accuracy of 90.46\%. The model has many parameters, requiring a large amount of tuning. \cite{chitra} consider the use of neural networks for detecting heart attacks, finding that using the Hybrid Intelligent Algorithm improves its accuracy. However, they comment that a neural networks approach can be time consuming; one must balance dimensionality reduction with accuracy. \cite{ranga} deployed a variety of classifiers including k-nearest neighbors, artificial neural network, decision tree, random forest, and support vector machine (SVM), with each resulting in an accuracy of approximately 80\%. They found that the random forest method was most effective, but believe that their results might have been more accurate if they had more instances. \cite{ware} conducted a similar study by testing six classifiers; they found that SVMs were the most effective. Like Ranga and Rohila, they noted that a larger dataset might result in higher accuracy, as well as more features. \cite{gawale} compared the results  between decision trees and SVMs, confirming that SVMs were more effective. However, they did not compare any other models.
+
+
+This previous work has explored the use of a variety of machine learning models in heart attack detection. In our work, we will particularly bring together a few of the simplest, most well-known machine learning algorithms to demonstrate and compare their effectiveness with respect to each other at the task. We will also note the effects of tweaking hyperparameters in the models we use.
+
+\subsection{Our Contribution}
+Our contributions in this project include:
+\begin{itemize}
+\item Detecting heart attacks given patient data
+\item Exploring how simple machine learning algorithms can be applied in addressing this task
+\item Identifying which of these algorithms are most effective at solving this task
+\end{itemize} 
+\section{Material and Methods}
+\begin{figure}[h]
+\includegraphics[width=12cm, height=4cm]{methods diagram}
+\centering
+\caption{A diagram of our methods}
+\centering
+\end{figure}
+Beginning with a dataset containing patient heart attack data, we will apply three simple machine learning methods - k-nearest neighbors, naive Bayes, and decision trees - testing relevant hyperparameters and model variations as appropriate. Upon obtaining the accuracy of each of these models, we will compare them to determine which models are the most effective. 
+\subsection{Dataset Description}
+Our dataset is "Heart Attack Analysis \& Prediction Dataset", uploaded to Kaggle by Rashik Rahman (https://www.kaggle.com/rashikrahmanpritom/heart-attack-analysis-prediction-dataset). Its attributes include:
+\begin{itemize}
+\item \textit{age}: age of the patient
+\item \textit{sex}: gender of the patient
+\item \textit{cp}: type of chest pain that the patient is experiencing (0, 1, 2, or 3)
+\item \textit{trtbps}: the patient's resting blood pressure in mm Hg
+\item \textit{chol}: the patient's cholesterol in mg/dl as obtained by BMI sensor
+\item \textit{fbs}: indicates whether the patient's fasting blood sugar is greater than 120 (1 = true, 0 = false)
+\item \textit{restecg}: the patient's resting electrocardographic results
+\item \textit{thalachh}: the patient's maximum heart rate measured
+\item \textit{exng}: exercised induced angina {1 = yes, 0 = no}
+\item \textit{oldpeak}: the patient's previous peak
+\item \textit{slp}: slope
+\item \textit{caa}: the patient's number of major blood vessels
+\item \textit{thall}: the patient's Thal rate
+\end{itemize}
+The class variable is \textit{output} - whether or not the patient experienced a heart attack.
+\subsection{Methodology}
+\subsubsection{K-nearest Neighbors}
+\textbf{K-nearest neighbors (KNN)} is a method that classifies an instance by comparing it to its $k$ closest neighbors. To classify an instance, the algorithm begins by computing the distance between it and each instance in the training dataset. For this study we will use the Euclidian distance metric. It then returns the majority class of the $k$ instances closest to the instance in question. We selected this algorithm because it is simple to implement and works well on numerical data.
+
+
+Before applying the KNN algorithm, we will normalize our dataset using min-max scaling. We will then test the algorithm with all possible values of $k$, ranging from 1 to the size of our training dataset.  
+\subsubsection{Naive Bayes Classifier}
+The \textbf{naive Bayes classifier} is a probabalistic method for predicting the class of an instance. Given features $F = \{f_1, f_2, ... , f_n\}$ and classes $C=\{c_1, c_2, ... , c_m\}$, the naive Bayes classifier $c_{NB}$ is defined as:
+\begin{equation} \label{eq:1}
+c_{NB} = \argmax_{c\epsilon C} P(c) \prod_{f\epsilon F} P(f | c)
+\end{equation}
+\citep{naive}. Given an instance $(x_1, x_2, ... , x_n)$, this classifier yields its most likely class based on the training data. If an attribute is discrete, its conditional probability will be calculated by relative frequency; if continuous, the conditional probability will be calculated according to the Gaussian probability density function. We chose this model due to its flexibility; it can be used properly on both categorical and continuous data.
+\subsubsection{Decision Trees}
+A \textbf{decision tree} applies a sequence of tests to an instance's attribute values to determine the instance's class. Each node of the tree corresponds to a test on an attribute; its branches correspond to the attribute's possible values. Each leaf corresponds to a class \citep{russel}. See the associated figure for an example.
+\begin{figure}[h]
+\includegraphics[width=6cm, height=6cm]{sample DT}
+\centering
+\caption{An example decision tree for deciding whether to fly a kite}
+\centering
+\end{figure}
+We selected this model because it is a simple yet powerful way to classify instances with both categorical and continuous attributes.
+
+
+There are two methods for selecting which attributes to add next while constructing a decision tree - entropy and the GINI index. We will build two decision trees, applying one of these methods to each, then compare their accuracies.
+\subsection{Performance Evaluation}
+To partition the dataset into training and testing data, we will first shuffle its instances. We will then select the last 60 of these instances (approximately 20 percent of the data) to use as our testing data. The remaining 243 instances will be used as training data. Upon fitting each model to the training data and applying each model to the testing data, we will report the model accuracy for each. We will also generate a confusion matrix for each model, by which we will obtain the numbers of true positives, false positives, true negatives, and false negatives.
+\section{Experimental Analysis}
+\subsection{K-nearest neighbors}
+We found that $k=7$ yielded the highest accuracy ($83.33\%$) for the KNN algorithm with min-max scaling.
+\begin{figure}[h]
+\includegraphics[width=7.34cm, height=4.9cm]{knn_k_acc}
+\centering
+\caption{Plot of $k$ vs. accuracy}
+\centering
+\end{figure}
+
+\begin{table}[h]
+\centering
+\begin{tabular}[h]{ |c|c|c| } 
+ \hline
+ \textit{KNN ($k=7$)} & \textbf{Predicted 1} & \textbf{Predicted 0} \\ 
+\hline
+ \textbf{Actual 1} & 28 & 2 \\ 
+\hline
+ \textbf{Actual 0} & 8 & 22 \\ 
+ \hline
+\end{tabular}
+\caption{Confusion matrix for KNN algorithm}
+\end{table}
+
+\subsection{Naive Bayes Classifier}
+The naive Bayes classifier yielded an accuracy of $85\%$. 
+
+
+\begin{table}[h]
+\centering
+\begin{tabular}[h]{ |c|c|c| } 
+ \hline
+ \textit{Naive Bayes} & \textbf{Predicted 1} & \textbf{Predicted 0} \\ 
+\hline
+ \textbf{Actual 1} & 27 & 3 \\ 
+\hline
+ \textbf{Actual 0} & 6 & 24 \\ 
+ \hline
+\end{tabular}
+\caption{Confusion matrix for naive Bayes classifier}
+\end{table}
+
+
+\subsection{Decision trees}
+The decision tree constructed using the GINI index yielded an accuracy of $82\%$; using entropy yielded an accuracy of $80\%$.
+
+% !h syntax from https://tex.stackexchange.com/questions/53263/the-place-of-my-table
+\begin{table}[!h]
+\centering
+\begin{tabular}[h]{ |c|c|c| } 
+ \hline
+ \textit{DT (GINI)} & \textbf{Predicted 1} & \textbf{Predicted 0} \\ 
+\hline
+ \textbf{Actual 1} & 27 & 3 \\ 
+\hline
+ \textbf{Actual 0} & 7 & 23 \\ 
+ \hline
+\end{tabular}
+\caption{Confusion matrix for decision tree with GINI}
+\end{table}
+
+
+\begin{table}[!h]
+\centering
+\begin{tabular}[h]{ |c|c|c| } 
+ \hline
+ \textit{DT (Entropy)} & \textbf{Predicted 1} & \textbf{Predicted 0} \\ 
+\hline
+ \textbf{Actual 1} & 27 & 3 \\ 
+\hline
+ \textbf{Actual 0} & 9 & 21 \\ 
+ \hline
+\end{tabular}
+\caption{Confusion matrix for decision tree with entropy}
+\end{table}
+
+
+\subsection{Model Comparison}
+Upon comparing the accuracy of each model, we found that the naive Bayes classifier was the most accurate. It was followed by KNN, decision trees with GINI, and decision trees with entropy, respectively.
+
+\begin{table}[!h]
+\centering
+\begin{tabular}[h]{ |c|c|c|c| } 
+ \hline
+ \textbf{KNN ($k=7$)} & \textbf{Naive Bayes} & \textbf{DT (GINI)} & \textbf{DT (entropy)} \\ 
+\hline
+ 83.33\% & 85\% & 82\% & 80\% \\ 
+ \hline
+\end{tabular}
+\caption{Accuracy obtained from each model}
+\end{table}
+
+% \url syntax from https://tex.stackexchange.com/questions/171441/url-not-showing-in-references/171453
+\subsection{Files}
+Our data, code, and all other relevant files can be obtained from \url{https://github.com/nhNetz/CMPSC_445_Heart}.
+
+\section{Conclusion}
+We used a set of patient medical data to train and test three simple machine learning models with the objective of detecting heart attacks. For each model, we tested different values for relevant hyper-parameters and model variations. Based on our results, the naive Bayes classifier is the most accurate at detecting heart attacks. It is followed by the KNN algorithm (with $k=7$ and min-max scaling), decision trees (with GINI), and decision trees (with entropy) respectively. All models yielded an accuracy of approximately 80\% or higher. Future work could include experimenting with other models, applying different performance evaluation techniques, or testing models on different combinations of attributes.
+
+\subsection{Contributions}
+Each author's contribution to this project is listed below.
+\begin{itemize}
+\item Nathaniel Netznik implemented the KNN algorithm and wrote the report.
+\item Huy Ngo implemented the decision trees.
+\item Zheyu Zhang implented the naive Bayes classifier.
+\item The authors collaborated to review each other's work and to address all other aspects of the study.
+\end{itemize} 
+
+\medskip
+
+\bibliography{references}
+
+\end{document}
