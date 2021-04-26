@@ -47,7 +47,7 @@ Our contributions in this project include:
 \end{figure}
 Beginning with a dataset containing patient heart attack data, we will apply three simple machine learning methods - k-nearest neighbors, naive Bayes, and decision trees - testing relevant hyperparameters and model variations as appropriate. Upon obtaining the accuracy of each of these models, we will compare them to determine which models are the most effective. 
 \subsection{Dataset Description}
-Our dataset is "Heart Attack Analysis \& Prediction Dataset", uploaded to Kaggle by Rashik Rahman (https://www.kaggle.com/rashikrahmanpritom/heart-attack-analysis-prediction-dataset). Its attributes include:
+Our dataset is "Heart Attack Analysis \& Prediction Dataset" (version 2), uploaded to Kaggle by Rashik Rahman for use by the public domain: \url{https://www.kaggle.com/rashikrahmanpritom/heart-attack-analysis-prediction-dataset/version/2}. At the time of this report, the dataset was last updated in March 2021. The dataset has 303 instances and 14 attributes, which are described below:
 \begin{itemize}
 \item \textit{age}: age of the patient
 \item \textit{sex}: gender of the patient
@@ -62,8 +62,9 @@ Our dataset is "Heart Attack Analysis \& Prediction Dataset", uploaded to Kaggle
 \item \textit{slp}: slope
 \item \textit{caa}: the patient's number of major blood vessels
 \item \textit{thall}: the patient's Thal rate
+\item \textit{output}: the class variable - whether or not the patient experienced a heart attack
 \end{itemize}
-The class variable is \textit{output} - whether or not the patient experienced a heart attack.
+.
 \subsection{Methodology}
 \subsubsection{K-nearest Neighbors}
 \textbf{K-nearest neighbors (KNN)} is a method that classifies an instance by comparing it to its $k$ closest neighbors. To classify an instance, the algorithm begins by computing the distance between it and each instance in the training dataset. For this study we will use the Euclidian distance metric. It then returns the majority class of the $k$ instances closest to the instance in question. We selected this algorithm because it is simple to implement and works well on numerical data.
